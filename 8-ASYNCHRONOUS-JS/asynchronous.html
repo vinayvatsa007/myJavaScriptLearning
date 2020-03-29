@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+        content="width=device-width,
+        initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible"
+        content="ie=edge">
+        <title>Asychronous JS</title>
+    </head>
+    <body>
+        <h1>Asychronous Java </h1>
+        <script>
+            //showing how asyn function setTimeout will be printed later even its being called before the 'the end'.
+            const second = ()=> {
+                setTimeout(()=>{
+                    console.log('second');
+                }, 2000);
+            }
+            const first = () =>{
+                console.log('first');
+                second();
+                console.log('The end');
+            }
+            first();
+        </script>
+    
+
+    </body>
+</html>
