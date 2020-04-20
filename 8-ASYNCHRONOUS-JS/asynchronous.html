@@ -1,4 +1,4 @@
-//124_from_promises_to_async/await
+<!-- 124_from_promises_to_async/await -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,57 +19,57 @@
       //        }
       //    );
       //
-      const recipeIds = [523, 883, 432, 974];
-      const recipeList = [
-        { id: 523, title: "tomato pasta1", publisher: "vinay" },
-        { id: 883, title: "tomato pasta2", publisher: "monu" },
-        { id: 432, title: "tomato pasta3", publisher: "vinay" },
-        { id: 974, title: "tomato pasta4", publisher: "vinay" },
-      ];
+      // const recipeIds = [523, 883, 432, 974];
+      // const recipeList = [
+      //   { id: 523, title: "tomato pasta1", publisher: "vinay" },
+      //   { id: 883, title: "tomato pasta2", publisher: "monu" },
+      //   { id: 432, title: "tomato pasta3", publisher: "vinay" },
+      //   { id: 974, title: "tomato pasta4", publisher: "vinay" },
+      // ];
 
-      const getIDs = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve(recipeIds);
-        }, 1000);
-      });
+      // const getIDs = new Promise((resolve, reject) => {
+      //   setTimeout(() => {
+      //     resolve(recipeIds);
+      //   }, 1000);
+      // });
 
-      const getRecipe = (recipeId) => {
-        return new Promise((resolve, reject) => {
-          setTimeout(
-            (id) => {
-              const recipe = recipeList.filter((item) => {
-                if (item.id === id) {
-                  return item;
-                }
-              });
-              // resolve(`{id:${id}, title:'${recipe.title}', publisher:'${recipe.publisher}'}`);
-              resolve(recipe[0]);
-            },
-            1000,
-            recipeId
-          );
-        });
-      };
+      // const getRecipe = (recipeId) => {
+      //   return new Promise((resolve, reject) => {
+      //     setTimeout(
+      //       (id) => {
+      //         const recipe = recipeList.filter((item) => {
+      //           if (item.id === id) {
+      //             return item;
+      //           }
+      //         });
+      //         // resolve(`{id:${id}, title:'${recipe.title}', publisher:'${recipe.publisher}'}`);
+      //         resolve(recipe[0]);
+      //       },
+      //       1000,
+      //       recipeId
+      //     );
+      //   });
+      // };
 
-      const getRelated = (publisher) => {
-        console.log("check pub", publisher);
-        return new Promise((resolve, reject) => {
-          setTimeout(
-            (pubId) => {
-              // const relatedRecipe = {title:'italian pasta', publisher:'vinay'};
-              // resolve(`${pubId}: ${relatedRecipe.title}`);
-              const relatedRecipe = recipeList.filter((item) => {
-                if (item.publisher == pubId) {
-                  return item;
-                }
-              });
-              resolve(relatedRecipe);
-            },
-            1000,
-            publisher
-          );
-        });
-      };
+      // const getRelated = (publisher) => {
+      //   console.log("check pub", publisher);
+      //   return new Promise((resolve, reject) => {
+      //     setTimeout(
+      //       (pubId) => {
+      //         // const relatedRecipe = {title:'italian pasta', publisher:'vinay'};
+      //         // resolve(`${pubId}: ${relatedRecipe.title}`);
+      //         const relatedRecipe = recipeList.filter((item) => {
+      //           if (item.publisher == pubId) {
+      //             return item;
+      //           }
+      //         });
+      //         resolve(relatedRecipe);
+      //       },
+      //       1000,
+      //       publisher
+      //     );
+      //   });
+      // };
 
       // getIDs
       //   .then((ids) => {
@@ -88,28 +88,52 @@
       //     console.log("some error occured...", error);
       //   });
 
-      async function getRecipes_AW() {
-        const ids = await getIDs;
-        console.log(ids);
+      // async function getRecipes_AW() {
+      //   const ids = await getIDs;
+      //   console.log(ids);
 
-        const recipe = await getRecipe(ids[2]);
-        console.log(recipe);
+      //   const recipe = await getRecipe(ids[2]);
+      //   console.log(recipe);
 
-        const relatedRecipe = await getRelated(recipe.publisher);
-        console.log(relatedRecipe);
+      //   const relatedRecipe = await getRelated(recipe.publisher);
+      //   console.log(relatedRecipe);
 
-        return recipe;
-      }
-      //   getRecipes_AW();
-      //   const rec = getRecipes_AW(); //=> will lead to pending promise state
-      //   console.log(rec);
-      //because its async func thus it keep on running in background and we have to use 'then' to get the value instead of promise",
-      getRecipes_AW().then((result) =>
-        console.log(
-          "resumlt of async func can be fetched used then....",
-          result
+      //   return recipe;
+      // }
+      // //   getRecipes_AW();
+      // //   const rec = getRecipes_AW(); //=> will lead to pending promise state
+      // //   console.log(rec);
+      // //because its async func thus it keep on running in background and we have to use 'then' to get the value instead of promise",
+      // getRecipes_AW().then((result) =>
+      //   console.log(
+      //     "resumlt of async func can be fetched used then....",
+      //     result
+      //   )
+      // );
+      //-----------------
+      // fetch("https://crossorigin.me/https://www.metaweather.com/api/location/2487956/")
+      //--------------
+      // fetch("https://www.metaweather.com/api/location/2487956/", {
+      //   mode: "no-cors",
+      // })
+      //--------------------
+      function getWeather(woeid) {
+        fetch(
+          `https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`
         )
-      );
+          .then((result) => {
+            console.log(result);
+            return result.json();
+          })
+          .then((data) => {
+            // console.log(data);
+            const today = data.consolidated_weather[0];
+            console.log(`Temperatures in ${data.title} 
+            stay between ${today.min_temp} and ${today.max_temp}.`);
+          })
+          .catch((error) => console.log(error));
+      }
+      getWeather(2487956);
     </script>
   </body>
 </html>
