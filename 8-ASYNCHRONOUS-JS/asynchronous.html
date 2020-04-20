@@ -1,31 +1,92 @@
-<!-- 120_an_example_of_asynchronous_javascript -->
+//122_the_old_way_asynchronous_javascript_with_callbacks
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width,
-        initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scal=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Asychronous JS</title>
+    <title>Asynchronous JavaScript</title>
   </head>
   <body>
-    <h1>Asychronous Java</h1>
+    <h1>Asynchronous JavaScript</h1>
     <script>
-      //showing how asyn function setTimeout will be printed later even its being called before the 'the end'.
-      const second = () => {
+      //    // defining a promise uses a constructor of it class thus initializing is important and thus new keywork required
+      //    // promise take a callback function called 'executor' func that defines what the promise will do. this CBF will be called immediately the promise is created
+      //    // this CBF takes 2 args resolve, resject - these are actually the callback functions for informing back to executor func
+      //    // if promise is successfull or not.
+      //    const getIDs = new Promise((resolve, reject) = > {
+      //            //define and return resolve and reject func here
+      //        }
+      //    );
+      //
+      const recipeIds = [523, 883, 432, 974];
+      const recipeList = [
+        { id: 523, title: "tomato pasta1", publisher: "vinay" },
+        { id: 883, title: "tomato pasta2", publisher: "monu" },
+        { id: 432, title: "tomato pasta3", publisher: "vinay" },
+        { id: 974, title: "tomato pasta4", publisher: "vinay" },
+      ];
+
+      const getIDs = new Promise((resolve, reject) => {
         setTimeout(() => {
-          console.log("second");
-        }, 2000);
+          resolve(recipeIds);
+        }, 1000);
+      });
+
+      const getRecipe = (recipeId) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(
+            (id) => {
+              const recipe = recipeList.filter((item) => {
+                if (item.id === id) {
+                  return item;
+                }
+              });
+              // resolve(`{id:${id}, title:'${recipe.title}', publisher:'${recipe.publisher}'}`);
+              resolve(recipe[0]);
+            },
+            1000,
+            recipeId
+          );
+        });
       };
-      const first = () => {
-        console.log("first");
-        second();
-        console.log("The end");
+
+      const getRelated = (publisher) => {
+        console.log("check pub", publisher);
+        return new Promise((resolve, reject) => {
+          setTimeout(
+            (pubId) => {
+              // const relatedRecipe = {title:'italian pasta', publisher:'vinay'};
+              // resolve(`${pubId}: ${relatedRecipe.title}`);
+              const relatedRecipe = recipeList.filter((item) => {
+                if (item.publisher == pubId) {
+                  return item;
+                }
+              });
+              resolve(relatedRecipe);
+            },
+            1000,
+            publisher
+          );
+        });
       };
-      first();
+
+      getIDs
+        .then((ids) => {
+          console.log("list of recipe ids---", ids);
+          return getRecipe(ids[2]);
+        })
+        .then((recipe) => {
+          console.log("list of recipes---", recipe);
+          console.log("picking pubid from getRecipe results", recipe.publisher);
+          return getRelated(recipe.publisher);
+        })
+        .then((relatedRecipe) => {
+          console.log("other recipe of same publisher", relatedRecipe);
+        })
+        .catch((error) => {
+          console.log("some error occured...", error);
+        });
     </script>
   </body>
 </html>
