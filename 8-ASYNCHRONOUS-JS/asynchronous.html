@@ -1,4 +1,4 @@
-//123_from_callback_hell_to_promises
+//124_from_promises_to_async/await
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -71,22 +71,45 @@
         });
       };
 
-      getIDs
-        .then((ids) => {
-          console.log("list of recipe ids---", ids);
-          return getRecipe(ids[2]);
-        })
-        .then((recipe) => {
-          console.log("list of recipes---", recipe);
-          console.log("picking pubid from getRecipe results", recipe.publisher);
-          return getRelated(recipe.publisher);
-        })
-        .then((relatedRecipe) => {
-          console.log("other recipe of same publisher", relatedRecipe);
-        })
-        .catch((error) => {
-          console.log("some error occured...", error);
-        });
+      // getIDs
+      //   .then((ids) => {
+      //     console.log("list of recipe ids---", ids);
+      //     return getRecipe(ids[2]);
+      //   })
+      //   .then((recipe) => {
+      //     console.log("list of recipes---", recipe);
+      //     console.log("picking pubid from getRecipe results", recipe.publisher);
+      //     return getRelated(recipe.publisher);
+      //   })
+      //   .then((relatedRecipe) => {
+      //     console.log("other recipe of same publisher", relatedRecipe);
+      //   })
+      //   .catch((error) => {
+      //     console.log("some error occured...", error);
+      //   });
+
+      async function getRecipes_AW() {
+        const ids = await getIDs;
+        console.log(ids);
+
+        const recipe = await getRecipe(ids[2]);
+        console.log(recipe);
+
+        const relatedRecipe = await getRelated(recipe.publisher);
+        console.log(relatedRecipe);
+
+        return recipe;
+      }
+      //   getRecipes_AW();
+      //   const rec = getRecipes_AW(); //=> will lead to pending promise state
+      //   console.log(rec);
+      //because its async func thus it keep on running in background and we have to use 'then' to get the value instead of promise",
+      getRecipes_AW().then((result) =>
+        console.log(
+          "resumlt of async func can be fetched used then....",
+          result
+        )
+      );
     </script>
   </body>
 </html>
