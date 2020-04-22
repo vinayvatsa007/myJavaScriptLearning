@@ -136,36 +136,77 @@
       // }
       // getWeather(2487956); // data San francisco
       // getWeather(44418); // data London
+      //-=================================================================
       // useing fetch api function using normal way of callbacks with promise
-      function getUsers(userNumber) {
-        //`https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`
-        // fetch(`https://api.github.com/users`)
-        fetch(`https://api.github.com/users`)
-          .then((result) => {
-            // console.log(result);
-            return result.json();
-          })
-          .then((dataJson) => {
-            console.log("full list", dataJson);
-            console.log("one item--", dataJson[userNumber]);
-            const user = dataJson[userNumber];
-            console.log(
-              `user[${userNumber}] details ------------ ${user.login} and id --- ${user.id} and the url----- ${user.url}`
-            );
-            // i didnt understand why it won't be able to return data from here
-            // return dataJson;
-          })
-          .catch((error) => console.log(error));
-      }
+      // function getUsers(userNumber) {
+      //   //`https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`
+      //   // fetch(`https://api.github.com/users`)
+      //   fetch(`https://api.github.com/users`)
+      //     .then((result) => {
+      //       // console.log(result);
+      //       return result.json();
+      //     })
+      //     .then((dataJson) => {
+      //       console.log("full list", dataJson);
+      //       console.log("one item--", dataJson[userNumber]);
+      //       const user = dataJson[userNumber];
+      //       console.log(
+      //         `user[${userNumber}] details ------------ ${user.login} and id --- ${user.id} and the url----- ${user.url}`
+      //       );
+      //       // i didnt understand why it won't be able to return data from here
+      //       // return dataJson;
+      //     })
+      //     .catch((error) => console.log(error));
+      // }
 
-      getUsers(9);
-      getUsers(10);
-      // i didnt understand why it won't be able to return data from here
-      // const userNumber = 9;
-      // getUsers(userNumber).then((result) =>
-      //   // console.log(`user Number[${userNumber}] `, result)
-      //   console.log(`returned user details ---------`, result)
-      // );
+      // getUsers(9);
+      // getUsers(10);
+      // // i didnt understand why it won't be able to return data from here
+      // // const userNumber = 9;
+      // // getUsers(userNumber).then((result) =>
+      // //   // console.log(`user Number[${userNumber}] `, result)
+      // //   console.log(`returned user details ---------`, result)
+      // // );
+      //-=================================================================
+      // using users api using async await method
+      async function getUsersAW(userNumber) {
+        try {
+          const users = await fetch("https://api.github.com/users");
+          // console.log(users);
+          const usersJSON = await users.json();
+          console.log(usersJSON);
+          const user = usersJSON[userNumber];
+          console.log(user);
+          console.log(
+            `user[${userNumber}] details ------------ ${user.login} and id --- ${user.id} and the url----- ${user.url}`
+          );
+          return user;
+        } catch (error) {
+          // alert(error);
+          console.log(error);
+        }
+      }
+      //------- it works fine like this------------
+      // getUsersAW(9);
+      // getUsersAW(10);
+      //----------- wont work--------
+      // this way it won't work because its promise and code is running in background and thus will return promise not data thus use await or .then()
+      // const user10th = getUsersAW(2487956);
+      // console.log("----------user10th-------", user10th);
+      // becuase it promise thus use .then or await
+      let userN;
+      let userNumber = 9;
+      // getting promise result using .then
+      getUsersAW(userNumber).then((data) => {
+        userN = data;
+        console.log(userNumber);
+        console.log(`----------user number ${userNumber}-------`, userN);
+      });
+
+      userNumber = 10;
+      // getting promise result using await because its async func which runs in background and will return promise instead of value otherwise.
+      const userN_AW = getUsersAW(userNumber);
+      console.log(`----------user number ${userNumber}-------`, userN_AW);
     </script>
   </body>
 </html>
