@@ -117,23 +117,55 @@
       //   mode: "no-cors",
       // })
       //--------------------
-      function getWeather(woeid) {
-        fetch(
-          `https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`
-        )
+      // didnot work due to cross origin, thus i tried code with some other api which don't have cors issue
+      // function getWeather(woeid) {
+      //   fetch(
+      //     `https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`
+      //   )
+      //     .then((result) => {
+      //       // console.log(result);
+      //       return result.json();
+      //     })
+      //     .then((data) => {
+      //       console.log("full list data in json form", data);
+      //       const today = data.consolidated_weather[0];
+      //       console.log(`Temperatures in ${data.title}
+      //       stay between ${today.min_temp} and ${today.max_temp}.`);
+      //     })
+      //     .catch((error) => console.log(error));
+      // }
+      // getWeather(2487956); // data San francisco
+      // getWeather(44418); // data London
+      // useing fetch api function using normal way of callbacks with promise
+      function getUsers(userNumber) {
+        //`https://crossorigin.me/https://www.metaweather.com/api/location/${woeid}/`
+        // fetch(`https://api.github.com/users`)
+        fetch(`https://api.github.com/users`)
           .then((result) => {
-            console.log(result);
+            // console.log(result);
             return result.json();
           })
-          .then((data) => {
-            // console.log(data);
-            const today = data.consolidated_weather[0];
-            console.log(`Temperatures in ${data.title} 
-            stay between ${today.min_temp} and ${today.max_temp}.`);
+          .then((dataJson) => {
+            console.log("full list", dataJson);
+            console.log("one item--", dataJson[userNumber]);
+            const user = dataJson[userNumber];
+            console.log(
+              `user[${userNumber}] details ------------ ${user.login} and id --- ${user.id} and the url----- ${user.url}`
+            );
+            // i didnt understand why it won't be able to return data from here
+            // return dataJson;
           })
           .catch((error) => console.log(error));
       }
-      getWeather(2487956);
+
+      getUsers(9);
+      getUsers(10);
+      // i didnt understand why it won't be able to return data from here
+      // const userNumber = 9;
+      // getUsers(userNumber).then((result) =>
+      //   // console.log(`user Number[${userNumber}] `, result)
+      //   console.log(`returned user details ---------`, result)
+      // );
     </script>
   </body>
 </html>
